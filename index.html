@@ -170,7 +170,7 @@ Cheese~500~12
 Zinger Bun Pcs~50~12
 Chicken~500~7
 Chicken Wrap~380~14
-Chicken Burger~249~1`.strip();
+Chicken Burger~249~1`.trim();
 const rawProducts=packedMenu.split('\n').map(line=>{const [name,price,cat]=line.split('~');return{name,price:Number(price),cat:categoryNames[Number(cat)]}});
 const icons={Broasts:'🍗',Burgers:'🍔',Deals:'🎁',Drinks:'🥤',Extras:'➕',Fries:'🍟',Nuggets:'🍗',Other:'🍽️',Pasta:'🍝',Pizza:'🍕',Platers:'🍱',Roll:'🌯',Sides:'🍟',Wings:'🍗',Wrap:'🌯'};
 const colors={Broasts:'#e9d7c1',Burgers:'#f5e0c8',Deals:'#e6edce',Drinks:'#d5e5d6',Extras:'#f0eddf',Fries:'#f2e7b6',Nuggets:'#e9d7c1',Other:'#e8e2d5',Pasta:'#f3d7b9',Pizza:'#f0d5c7',Platers:'#e6edce',Roll:'#e4e9c9',Sides:'#f2e7b6',Wings:'#f5e0c8',Wrap:'#e4e9c9'};
