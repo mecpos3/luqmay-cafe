@@ -114,6 +114,7 @@ footer{background:#2b1a11;color:#f9e8d5}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
 
+<style>
 /* Automatic Luqmay poster slider popup */
 .poster-popup{display:none;position:fixed;inset:0;z-index:200;background:rgba(24,14,8,.88);align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
 .poster-popup.open{display:flex}
@@ -125,6 +126,7 @@ footer{background:#2b1a11;color:#f9e8d5}
 .poster-popup-arrow{border:0;border-radius:50%;width:42px;height:42px;background:#b96e35;color:white;font-size:25px;cursor:pointer}
 .poster-popup-count{font-size:13px;letter-spacing:.08em}
 @media(max-width:600px){.poster-popup{padding:9px}.poster-popup-panel{width:96vw;padding:9px;border-radius:13px}.poster-popup-image-wrap{height:78vh}.poster-popup-close{width:38px;height:38px}.poster-popup-arrow{width:38px;height:38px}}
+</style>
 
 </head>
 <body>
@@ -133,11 +135,11 @@ footer{background:#2b1a11;color:#f9e8d5}
   <div class="poster-popup-panel">
     <button class="poster-popup-close" type="button" onclick="closePosterPopup()" aria-label="Close posters">×</button>
     <div class="poster-popup-image-wrap" id="posterPopupSwipe">
-      <img class="poster-popup-image" id="posterPopupImage" src="assets/dip-poster.jpg" alt="Luqmay Cafe promotional poster">
+      <img class="poster-popup-image" id="posterPopupImage" src="assets/popup-ufo-burger.jpg" alt="Luqmay Cafe promotional poster">
     </div>
     <div class="poster-popup-nav">
       <button class="poster-popup-arrow" type="button" onclick="changePoster(-1)" aria-label="Previous poster">‹</button>
-      <span class="poster-popup-count" id="posterPopupCount">1 / 8</span>
+      <span class="poster-popup-count" id="posterPopupCount">1 / 7</span>
       <button class="poster-popup-arrow" type="button" onclick="changePoster(1)" aria-label="Next poster">›</button>
     </div>
   </div>
