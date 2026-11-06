@@ -44,7 +44,7 @@ footer{background:#f0e4d3}
 
 /* Luqmay Instagram campaign gallery */
 .hero-art{
-  background-image:linear-gradient(0deg,#21120822,#21120808),url('assets/flying-car.jpg')!important;
+  background-image:linear-gradient(0deg,#21120822,#21120808),url('assets/delivery-rider.png')!important;
   background-size:cover!important;background-position:center!important;
 }
 .hero-art>div[style]{display:none!important}
@@ -113,8 +113,36 @@ footer{background:#2b1a11;color:#f9e8d5}
 @media(max-width:760px){.nav{flex-wrap:wrap;justify-content:center;padding:12px 16px;gap:12px}.navlinks{order:3;width:100%;justify-content:center;gap:16px;flex-wrap:wrap}.hero{grid-template-columns:1fr;padding:42px 20px;gap:28px}.hero-art{min-height:280px}.hero h1{font-size:clamp(42px,12vw,64px)}.section{padding:46px 18px}.section-head{align-items:flex-start;flex-direction:column}.order-choice-bar{padding:12px 14px}.order-choice-actions{gap:10px}.order-choice-btn{min-width:0}.menu-grid{gap:12px}.item{border-radius:15px}.itemrow{padding:12px}.btn{padding:12px 17px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
+
+/* Automatic Luqmay poster slider popup */
+.poster-popup{display:none;position:fixed;inset:0;z-index:200;background:rgba(24,14,8,.88);align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+.poster-popup.open{display:flex}
+.poster-popup-panel{position:relative;width:min(560px,94vw);max-height:92vh;background:#fff6e8;border:1px solid #d8b98f;border-radius:18px;padding:14px;box-sizing:border-box;box-shadow:0 24px 80px #0007}
+.poster-popup-image-wrap{height:min(76vh,760px);display:flex;align-items:center;justify-content:center;background:#f4e2c9;border-radius:12px;overflow:hidden}
+.poster-popup-image{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.poster-popup-close{position:absolute;right:9px;top:9px;z-index:3;border:0;border-radius:50%;width:42px;height:42px;background:#3a2418;color:#fff;font-size:27px;line-height:1;cursor:pointer;box-shadow:0 3px 12px #0004}
+.poster-popup-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 3px 2px;color:#3a2418;font-weight:800}
+.poster-popup-arrow{border:0;border-radius:50%;width:42px;height:42px;background:#b96e35;color:white;font-size:25px;cursor:pointer}
+.poster-popup-count{font-size:13px;letter-spacing:.08em}
+@media(max-width:600px){.poster-popup{padding:9px}.poster-popup-panel{width:96vw;padding:9px;border-radius:13px}.poster-popup-image-wrap{height:78vh}.poster-popup-close{width:38px;height:38px}.poster-popup-arrow{width:38px;height:38px}}
+
 </head>
 <body>
+
+<div class="poster-popup" id="posterPopup" role="dialog" aria-modal="true" aria-label="Luqmay Cafe posters">
+  <div class="poster-popup-panel">
+    <button class="poster-popup-close" type="button" onclick="closePosterPopup()" aria-label="Close posters">×</button>
+    <div class="poster-popup-image-wrap" id="posterPopupSwipe">
+      <img class="poster-popup-image" id="posterPopupImage" src="assets/dip-poster.jpg" alt="Luqmay Cafe promotional poster">
+    </div>
+    <div class="poster-popup-nav">
+      <button class="poster-popup-arrow" type="button" onclick="changePoster(-1)" aria-label="Previous poster">‹</button>
+      <span class="poster-popup-count" id="posterPopupCount">1 / 8</span>
+      <button class="poster-popup-arrow" type="button" onclick="changePoster(1)" aria-label="Next poster">›</button>
+    </div>
+  </div>
+</div>
+
 <div class="topbar">GOOD FOOD. GOOD MOOD. &nbsp; ✦ &nbsp; LUQMAY CAFE · RAWALPINDI</div>
 <div class="order-choice-bar"><div class="order-choice-heading">HOW WOULD YOU LIKE YOUR ORDER?</div><div class="order-choice-actions"><button type="button" class="order-choice-btn delivery-choice" onclick="chooseTopOrder('Delivery')"><span class="order-choice-icon">🛵</span><span><strong>Home Delivery</strong><small>Get it delivered to you</small></span><span class="order-choice-arrow">→</span></button><button type="button" class="order-choice-btn pickup-choice" onclick="chooseTopOrder('Pickup')"><span class="order-choice-icon">🛍️</span><span><strong>Pickup from Cafe</strong><small>Order ahead, collect yourself</small></span><span class="order-choice-arrow">→</span></button></div></div>
 <header class="nav"><a class="brand" href="#home" aria-label="Luqmay Cafe home"><span style="font-family:Georgia,serif;font-weight:900;font-size:29px;letter-spacing:.04em;color:#352014;text-shadow:1px 1px #d9b76a">LUQMAY<small style="display:block;font:800 9px Arial,sans-serif;letter-spacing:.12em;text-shadow:none;color:#352014">FAST FOOD & BREAKFAST</small></span></a><nav class="navlinks"><a href="#menu">Menu</a><a href="#story">Our vibe</a><a href="#contact">Contact</a><button class="btn btn-dark cartbtn" onclick="openCart()">Your order <span class="count" id="cartCount">0</span></button></nav></header>
@@ -348,6 +376,58 @@ function editMenuItem(id){const p=products.find(x=>x.id===id);if(!p)return;editi
 function closeMenuEditor(){document.getElementById('menuEditModal').classList.remove('open');editingMenuId=null;}
 function saveMenuItem(){const p=products.find(x=>x.id===editingMenuId);if(!p)return;const name=document.getElementById('editItemName').value.trim(),price=Number(document.getElementById('editItemPrice').value),photo=document.getElementById('editItemPhoto').value.trim();if(!name||!Number.isFinite(price)||price<0){alert('Item name aur valid price enter karein.');return;}p.name=name;p.price=price;if(photo)p.photo=photo;try{const saved=JSON.parse(localStorage.getItem('luqmayMenuEdits')||'{}');saved[p.id]={name:p.name,price:p.price,photo:p.photo};localStorage.setItem('luqmayMenuEdits',JSON.stringify(saved));}catch(e){alert('Browser storage available nahi. Changes current page par rahengi, reload ke baad save nahi hongi.');}closeMenuEditor();renderMenu();}
 function exportMenuEdits(){const data=localStorage.getItem('luqmayMenuEdits')||'{}';const blob=new Blob([data],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='luqmay-menu-edits.json';a.click();URL.revokeObjectURL(a.href);}
+</script>
+
+
+<script>
+(function(){
+  const posterSlides = [
+    {src:'assets/dip-poster.jpg', alt:'Luqmay dip poster'},
+    {src:'assets/flying-car.jpg', alt:'Luqmay delivery campaign'},
+    {src:'assets/gyro-bowl.jpg', alt:'Luqmay Gyro Bowl poster'},
+    {src:'assets/menu-feast.jpg', alt:'Luqmay menu favourites poster'},
+    {src:'assets/pizza-craving.jpg', alt:'Luqmay pizza craving poster'},
+    {src:'assets/pizza-smile.jpg', alt:'Luqmay cheesy pizza poster'},
+    {src:'assets/ufo-dream.jpg', alt:'Luqmay UFO Burger poster'},
+    {src:'assets/ufo-offer.jpg', alt:'Luqmay UFO Burger offer poster'}
+  ];
+  let posterIndex=0, touchStartX=0;
+  const popup=document.getElementById('posterPopup');
+  const image=document.getElementById('posterPopupImage');
+  const count=document.getElementById('posterPopupCount');
+  function showPoster(){
+    const slide=posterSlides[posterIndex];
+    image.src=slide.src; image.alt=slide.alt;
+    count.textContent=(posterIndex+1)+' / '+posterSlides.length;
+  }
+  window.changePoster=function(step){
+    posterIndex=(posterIndex+step+posterSlides.length)%posterSlides.length;
+    showPoster();
+  };
+  window.closePosterPopup=function(){
+    popup.classList.remove('open');
+    document.body.style.overflow='';
+  };
+  function openPosterPopup(){
+    popup.classList.add('open');
+    document.body.style.overflow='hidden';
+    showPoster();
+  }
+  document.addEventListener('keydown',function(e){
+    if(!popup.classList.contains('open')) return;
+    if(e.key==='Escape') window.closePosterPopup();
+    if(e.key==='ArrowLeft') window.changePoster(-1);
+    if(e.key==='ArrowRight') window.changePoster(1);
+  });
+  const swipe=document.getElementById('posterPopupSwipe');
+  swipe.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].screenX;},{passive:true});
+  swipe.addEventListener('touchend',e=>{
+    const delta=e.changedTouches[0].screenX-touchStartX;
+    if(Math.abs(delta)>45) window.changePoster(delta<0?1:-1);
+  },{passive:true});
+  popup.addEventListener('click',e=>{if(e.target===popup)window.closePosterPopup();});
+  window.addEventListener('load',()=>setTimeout(openPosterPopup,450));
+})();
 </script>
 
 </body></html>
